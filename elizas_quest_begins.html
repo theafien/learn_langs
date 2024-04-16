@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="languageApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Lost Jungle Adventure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.min.js"></script>
+    <style>
+        .text-line p {
+            padding: 0;
+            margin: 0;
+        }
+        .text-line {
+            margin: 20px;
+            padding: 5px;
+            border-bottom: dashed 2px #ccc;
+        }
+        .text-title {
+            font-size: 150%;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            margin-left: 0;
+            padding-left: 0;
+            color: #000;
+        }
+
+        .text-sub {
+            margin: 5px auto;            
+            margin-left: 3px;
+            margin-bottom: 10px;
+            padding-bottom: 3px;
+            
+        }
+
+        .text-sub p {
+            color: #777;
+            font-style: normal;
+            padding-left: 7px;
+            border-left: solid 5px #c0c0c0;
+            margin-bottom: 5px;
+            font-size: 120%;
+        }
+        div.text-sub p:first-child {
+            color: #444;
+        }
+
+        .select-language {
+            padding: 10px;
+            margin: 0 20px;
+            background-color: #f1f1f1;
+            text-decoration: none;
+            font-size: large;
+            align-items: stretch;
+            flex-grow: 1;
+            text-align: center;
+            color: #000;
+        }
+        .selected-language {
+            background-color: #ccc;
+        }
+        .group-languages {
+            text-align: left;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            padding: 10px 10px 10px 0;
+        }
+
+    </style>
+</head>
+
+<body ng-controller="LanguageController">
+
+    <div class="group-languages" aria-hidden="true">
+        <!-- Lista de idiomas clicáveis -->
+        <a ng-class="language === selectedLanguage ? 'select-language selected-language' : 'select-language'" ng-repeat="language in languages" href="" ng-click="changeLanguage(language);">
+            {{ language }}
+        </a>
+    </div>
+    
+
+    <!-- Exibe os textos intercalados para cada idioma -->
+    <div ng-repeat="(language, data) in languageData">
+        <div ng-repeat="(index, text) in data" ng-if="language === selectedLanguage"  class="text-line">
+                <p class="text-title">
+                    <span ng-bind-html="to_trusted(text)"></span>
+                </p>
+                <div class="text-sub">
+                    <p aria-hidden="true" ng-repeat="(l, d) in languageData" ng-if="l !== language">
+                        {{ d[index] }}
+                    </p>
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+        var app = angular.module('languageApp', ["ngSanitize"]);
+
+        app.controller('LanguageController', function ($scope, $sce) {
+            // Lista de idiomas disponíveis
+            $scope.languages = ['en-us', 'es-ar', 'pt-br'];
+
+            // Dados de texto em formato JSON
+            $scope.languageData = {
+                    "en-us": [
+                        "Once upon a time in a small village nestled among the rolling hills,",
+                        "there lived a young shepherd named Liam.",
+                        "Liam tended to his flock of sheep with unwavering dedication,",
+                        "always ensuring they were well-fed and safe from harm.",
+                        "One day, while leading his sheep to graze in the lush meadows,",
+                        "Liam stumbled upon a hidden cave tucked away in the hillside.",
+                        "Curiosity piqued,",
+                        "he cautiously ventured inside and discovered a trove of ancient artifacts glittering in the dim light.",
+
+                        "Among the treasures,",
+                        "he found a beautifully crafted sword,",
+                        "its blade shimmering with an otherworldly glow.",
+                        "Sensing its significance,",
+                        "Liam carefully grasped the sword,",
+                        "feeling a surge of power coursing through him.",
+                        "Little did he know,",
+                        "the sword was imbued with magic from a long-forgotten era,",
+                        "destined to be wielded by a chosen hero.",
+
+                        "As days passed,",
+                        "strange occurrences began to unfold in the village.",
+                        "Dark clouds loomed overhead,",
+                        "and whispers of a looming threat spread like wildfire.",
+                        "Sensing the growing unease among his fellow villagers,",
+                        "Liam knew  it was time to step forward and embrace his destiny.",
+
+                        "Armed with the enchanted sword,",
+                        "Liam embarked on a quest to vanquish the evil that threatened to engulf the land.",
+                        "Along the way,",
+                        "he encountered formidable adversaries and faced countless trials,",
+                        "but with each challenge,",
+                        "his resolve only grew stronger.",
+
+                        "Finally, after a perilous journey,",
+                        "Liam reached the heart of the darkness—a towering fortress where the malevolent force behind the chaos resided.",
+                        "With courage and determination,",
+                        "he confronted the dark sorcerer in a battle that shook the very foundations of the earth.",
+
+                        "In the end,",
+                        "it was Liam's unwavering spirit and the power of the enchanted sword that prevailed.",
+                        "As the sunlight broke through the clouds,",
+                        "bathing the land in its golden glow once more,",
+                        "peace was restored to the village,",
+                        "and Liam emerged as a true hero,",
+                        "forever etched in the annals of history."
+                    ],
+                    "pt-br": [
+                        "Era uma vez, em uma pequena vila situada entre as colinas ondulantes,",
+                        "um jovem pastor chamado Liam.",
+                        "Liam cuidava de seu rebanho de ovelhas com dedicação inabalável,",
+                        "sempre garantindo que estivessem bem alimentadas e seguras de qualquer perigo.",
+                        "Um dia, enquanto conduzia suas ovelhas para pastar nos prados exuberantes,",
+                        "Liam tropeçou em uma caverna escondida nas encostas.",
+                        "Curioso,",
+                        "ele adentrou cautelosamente e descobriu um tesouro de artefatos antigos cintilando na luz tênue.",
+
+                        "Entre os tesouros,",
+                        "encontrou uma espada lindamente trabalhada,",
+                        "sua lâmina brilhava com um resplendor de outro mundo.",
+                        "Sentindo sua importância,",
+                        "Liam segurou cuidadosamente a espada,",
+                        "sentindo uma onda de poder percorrendo-o.",
+                        "Sem saber,",
+                        "a espada estava imbuida de magia de uma era esquecida,",
+                        "destinada a ser empunhada por um herói escolhido.",
+
+                        "Com o passar dos dias,",
+                        "acontecimentos estranhos começaram a se desenrolar na vila.",
+                        "Nuvens escuras pairavam sobre ela,",
+                        "e sussurros de uma ameaça iminente se espalhavam como fogo.",
+                        "Sentindo a crescente inquietação entre seus companheiros,",
+                        "Liam sabia que era hora de dar um passo à frente e abraçar seu destino.",
+
+                        "Armado com a espada encantada,",
+                        "Liam partiu em uma busca para derrotar o mal que ameaçava engolir a terra.",
+                        "No caminho,",
+                        "encontrou adversários formidáveis e enfrentou inúmeras provações,",
+                        "mas a cada desafio,",
+                        "sua determinação apenas se fortalecia.",
+
+                        "Finalmente, após uma jornada perigosa,",
+                        "Liam chegou ao coração da escuridão: uma imponente fortaleza onde residia a força maligna por trás do caos.",
+                        "Com coragem e determinação,",
+                        "enfrentou o feiticeiro sombrio em uma batalha que abalou os próprios fundamentos da terra.",
+
+                        "No final,",
+                        "foi o espírito inabalável de Liam e o poder da espada encantada que prevaleceram.",
+                        "Quando a luz do sol rompeu as nuvens,",
+                        "banhando a terra mais uma vez em seu brilho dourado,",
+                        "a paz retornou à vila",
+                        "e Liam emergiu como um verdadeiro herói,",
+                        "gravado para sempre nos anais da história."
+                    ],
+                    "es-ar": [
+                        "Había una vez en un pequeño pueblo entre las colinas onduladas,",
+                        "vivía un joven pastor llamado Liam.",
+                        "Liam cuidaba de su rebaño de ovejas con dedicación inquebrantable,",
+                        "siempre asegurándose de que estuvieran bien alimentadas y a salvo de cualquier peligro.",
+                        "Un día, mientras llevaba a sus ovejas a pastar en los exuberantes prados,",
+                        "Liam tropezó con una cueva escondida entre las laderas.",
+                        "Curioso,",
+                        "se aventuró cautelosamente dentro y descubrió un tesoro de artefactos antiguos que brillaban en la tenue luz.",
+
+                        "Entre los tesoros,",
+                        "encontró una espada bellamente elaborada,",
+                        "su hoja brillaba con un resplandor de otro mundo.",
+                        "Sintiendo su significado,",
+                        "Liam agarró cuidadosamente la espada,",
+                        "sintiendo una oleada de poder recorrerlo.",
+                        "Sin saberlo,",
+                        "la espada estaba imbuida con magia de una era olvidada,",
+                        "destinada a ser empuñada por un héroe elegido.",
+
+                        "Con el paso de los días,",
+                        "comenzaron a desarrollarse extraños acontecimientos en el pueblo.",
+                        "Nubes oscuras se cernían sobre él",
+                        "y los susurros de una amenaza inminente se propagaban como un reguero de pólvora.",
+                        "Sintiendo la creciente inquietud entre sus compañeros,",
+                        "Liam sabía que era hora de dar un paso adelante y abrazar su destino.",
+
+                        "Armado con la espada encantada,",
+                        "Liam emprendió una búsqueda para derrotar al mal que amenazaba con engullir la tierra.",
+                        "En el camino,",
+                        "se encontró con adversarios formidables y enfrentó innumerables pruebas,",
+                        "pero con cada desafío,",
+                        "su determinación solo se hizo más fuerte.",
+
+                        "Finalmente, después de un viaje peligroso,",
+                        "Liam llegó al corazón de la oscuridad: una imponente fortaleza donde residía la fuerza maligna detrás del caos.",
+                        "Con valor y determinación,",
+                        "enfrentó al oscuro hechicero en una batalla que sacudió los cimientos mismos de la tierra.",
+
+                        "Al final,",
+                        "fue el espíritu inquebrantable de Liam y el poder de la espada encantada lo que prevaleció.",
+                        "Cuando la luz del sol atravesó las nubes,",
+                        "bañando la tierra una vez más con su resplandor dorado,",
+                        "la paz volvió al pueblo",
+                        "y Liam emergió como un verdadero héroe,",
+                        "grabado para siempre en los anales de la historia."
+                    ]
+                };
+
+            // Inicializa o idioma selecionado
+
+            // Função chamada ao alterar o idioma selecionado
+            $scope.changeLanguage = function (l) { $scope.selectedLanguage = l; };
+            $scope.to_trusted = function(html_code) {
+                return $sce.trustAsHtml(html_code);
+            }
+            // Inicializa os textos com o idioma padrão
+            $scope.changeLanguage($scope.languages[0]);
+        });
+    </script>
+</body>
+
+</html>
